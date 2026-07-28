@@ -83,18 +83,27 @@ def test_r_optim_bfgs_matches_r_on_rosenbrock():
         $value  3.8273827561079511e-08
         $counts function 118  gradient 38
 
-    Bit-exact agreement on par, value *and* the call counts means the line
-    search, the finite-difference gradient and the convergence test all
-    reproduce, not just the final answer.
+    The call counts are the sharp evidence and they are checked exactly: matching
+    R on 118 function and 38 gradient evaluations means the line search, the
+    finite-difference gradient and the convergence test all reproduce step for
+    step, not merely that both landed near the same minimum.
+
+    The coordinates are checked to 1e-12 rather than with ``==``. An earlier
+    version asserted exact float equality and passed on the machine the port was
+    written on; on CI runners it failed by 4.5e-14 — the last two digits — because
+    BFGS is iterative and different BLAS/libm builds diverge in the final ulps. A
+    tolerance of 1e-12 on a coordinate near 1.0 is still agreement to eleven
+    significant figures, and unlike ``==`` it is a claim that holds on hardware
+    other than the author's.
     """
 
     def rosen(p):
         return (1 - p[0]) ** 2 + 100 * (p[1] - p[0] ** 2) ** 2
 
     res = r_optim_bfgs(np.array([-1.2, 1.0]), rosen)
-    assert res.par[0] == 0.99980443323139745
-    assert res.par[1] == 0.99960838062348123
-    assert res.value == 3.8273827561079511e-08
+    assert res.par[0] == pytest.approx(0.99980443323139745, abs=1e-12)
+    assert res.par[1] == pytest.approx(0.99960838062348123, abs=1e-12)
+    assert res.value == pytest.approx(3.8273827561079511e-08, rel=1e-9)
     assert res.counts == {"function": 118, "gradient": 38}
     assert res.convergence == 0
 
