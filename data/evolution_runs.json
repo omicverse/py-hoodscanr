@@ -1,0 +1,150 @@
+{
+  "iter0": {
+    "label": "iter0 literal transcription",
+    "warmup_run_s": 14.936949867755175,
+    "wall_clock_runs_s": [
+      12.562086635269225,
+      12.622130925301462,
+      12.5650877780281
+    ],
+    "wall_clock_mean_s": 12.58310177953293,
+    "wall_clock_stddev_s": 0.03383352448431652,
+    "parity": {
+      "knn_distance": 5.684341886080801e-13,
+      "pm_raw": 4.996003610813204e-16,
+      "pm_merged_cosine": 0.9999999999980566,
+      "pm_merged_tv": 4.273705240556702e-05,
+      "entropy": 0.9999999999997109,
+      "perplexity": 0.999999999999571,
+      "tau_smoothfadeout": 0.0,
+      "perplexity_p": 0.9999999999999998,
+      "clusters": 1.0,
+      "colocal": 8.480711077840652e-08
+    },
+    "parity_passes": {
+      "knn_distance": true,
+      "pm_raw": true,
+      "pm_merged_cosine": true,
+      "pm_merged_tv": true,
+      "entropy": true,
+      "perplexity": true,
+      "tau_smoothfadeout": true,
+      "perplexity_p": true,
+      "clusters": true,
+      "colocal": false
+    },
+    "n_pass": 9,
+    "n_total": 10
+  },
+  "iter1": {
+    "label": "iter1 +permutation identity",
+    "warmup_run_s": 11.995320086367428,
+    "wall_clock_runs_s": [
+      12.063683805987239,
+      12.035683698020875,
+      11.979593601077795
+    ],
+    "wall_clock_mean_s": 12.02632036836197,
+    "wall_clock_stddev_s": 0.04281990888773668,
+    "parity": {
+      "knn_distance": 5.684341886080801e-13,
+      "pm_raw": 4.996003610813204e-16,
+      "pm_merged_cosine": 0.9999999999980566,
+      "pm_merged_tv": 4.273705240556702e-05,
+      "entropy": 0.9999999999997109,
+      "perplexity": 0.999999999999571,
+      "tau_smoothfadeout": 0.0,
+      "perplexity_p": 0.9999999999999998,
+      "clusters": 1.0,
+      "colocal": 8.480711077840652e-08
+    },
+    "parity_passes": {
+      "knn_distance": true,
+      "pm_raw": true,
+      "pm_merged_cosine": true,
+      "pm_merged_tv": true,
+      "entropy": true,
+      "perplexity": true,
+      "tau_smoothfadeout": true,
+      "perplexity_p": true,
+      "clusters": true,
+      "colocal": false
+    },
+    "n_pass": 9,
+    "n_total": 10
+  },
+  "iter2": {
+    "label": "iter2 +compiled R RNG",
+    "warmup_run_s": 0.28409472526982427,
+    "wall_clock_runs_s": [
+      0.2749997917562723,
+      0.27372897788882256,
+      0.273654124699533
+    ],
+    "wall_clock_mean_s": 0.2741276314482093,
+    "wall_clock_stddev_s": 0.0007562396790747989,
+    "parity": {
+      "knn_distance": 5.684341886080801e-13,
+      "pm_raw": 4.996003610813204e-16,
+      "pm_merged_cosine": 0.9999999999980566,
+      "pm_merged_tv": 4.273705240556702e-05,
+      "entropy": 0.9999999999997109,
+      "perplexity": 0.999999999999571,
+      "tau_smoothfadeout": 0.0,
+      "perplexity_p": 0.9999999999999998,
+      "clusters": 1.0,
+      "colocal": 8.480711077840652e-08
+    },
+    "parity_passes": {
+      "knn_distance": true,
+      "pm_raw": true,
+      "pm_merged_cosine": true,
+      "pm_merged_tv": true,
+      "entropy": true,
+      "perplexity": true,
+      "tau_smoothfadeout": true,
+      "perplexity_p": true,
+      "clusters": true,
+      "colocal": false
+    },
+    "n_pass": 9,
+    "n_total": 10
+  },
+  "iter3": {
+    "label": "iter3 +factorised merge",
+    "warmup_run_s": 0.22113005118444562,
+    "wall_clock_runs_s": [
+      0.2198357586748898,
+      0.22035957593470812,
+      0.22055302001535892
+    ],
+    "wall_clock_mean_s": 0.2202494515416523,
+    "wall_clock_stddev_s": 0.00037109499335389543,
+    "parity": {
+      "knn_distance": 5.684341886080801e-13,
+      "pm_raw": 4.996003610813204e-16,
+      "pm_merged_cosine": 0.9999999999980566,
+      "pm_merged_tv": 4.273705240556702e-05,
+      "entropy": 0.9999999999997109,
+      "perplexity": 0.999999999999571,
+      "tau_smoothfadeout": 0.0,
+      "perplexity_p": 0.9999999999999998,
+      "clusters": 1.0,
+      "colocal": 8.480711077840652e-08
+    },
+    "parity_passes": {
+      "knn_distance": true,
+      "pm_raw": true,
+      "pm_merged_cosine": true,
+      "pm_merged_tv": true,
+      "entropy": true,
+      "perplexity": true,
+      "tau_smoothfadeout": true,
+      "perplexity_p": true,
+      "clusters": true,
+      "colocal": false
+    },
+    "n_pass": 9,
+    "n_total": 10
+  }
+}

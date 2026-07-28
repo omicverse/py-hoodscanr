@@ -1,0 +1,137 @@
+# Pre-registered parity gate for `py-hoodscanR`
+#
+# COMMITTED BEFORE THE AGENT LOOP BEGAN (2026-07-28).
+# READ-ONLY during Steps 3 and 4. Thresholds are NOT to be moved to make the
+# port pass. If the gate fails, the port is wrong — not the gate.
+
+package: py-hoodscanR
+upstream:
+  name: hoodscanR
+  version: "1.7.2"
+  source: Bioconductor
+  url: https://github.com/DavisLaboratory/hoodscanR
+  paper: https://doi.org/10.1101/2024.03.26.586902
+
+# hoodscanR emits several outputs of different algorithm classes.
+# The headline class (per PARITY_TAXONOMY.md §"multiple outputs") is registered
+# per-output below; ALL must pass.
+algorithm_class: deterministic
+parity_threshold: 1.0e-8
+
+fixture:
+  path: data/fixture_spe_test.npz
+  source: "hoodscanR::spe_test — NanoString CosMx SMI, Lung9_Rep1 subset (the upstream package's own canonical fixture; real data)"
+  description: "2661 cells x 2 spatial coords, 6 cell-type annotations (Dividing.cells, Endothelial.cell, Epithelial.cell, Immune.cell, Stromal, Tumor.cells)"
+  expected_shape: [2661, 2]
+
+reference_command: tests/r_reference_driver.R
+
+seed: 42
+
+# Pipeline the gate is defined over (mirrors the upstream vignette exactly):
+#   readHoodData -> findNearCells(k=100) -> scanHoods -> mergeByGroup
+#   -> calcMetrics -> perplexityPermute -> clustByHood(k=10)
+
+outputs:
+
+  # ---- 1. k-NN distances ------------------------------------------------
+  - name: knn_distance
+    type: "matrix (n_cells x k)"
+    location_reference: "$.distance"
+    location_candidate: "fnc['distance']"
+    metric: deterministic
+    threshold: 1.0e-8
+    note: "RANN::nn2(searchtype='priority', eps=0) is exact; sklearn brute/kd-tree must agree to f64."
+
+  # ---- 2. raw soft-neighbourhood probability matrix ---------------------
+  - name: pm_raw
+    type: "matrix (n_cells x k), rows sum to 1"
+    location_reference: "$.pm"
+    location_candidate: "scan_hoods(...)"
+    metric: deterministic
+    threshold: 1.0e-8
+
+  # ---- 3. PRIMARY OUTPUT: merged per-cell neighbourhood probability -----
+  # Distributional class, per the task pre-registration.
+  - name: pm_merged_cosine
+    type: "matrix (n_cells x n_celltypes), rows sum to 1"
+    location_reference: "$.hoods"
+    location_candidate: "merge_by_group(...)"
+    metric: mean_per_cell_cosine
+    threshold: 0.9999
+    note: "mean over cells of cosine(p_R[i,:], p_py[i,:])"
+
+  - name: pm_merged_tv
+    type: "matrix (n_cells x n_celltypes)"
+    location_reference: "$.hoods"
+    location_candidate: "merge_by_group(...)"
+    metric: max_per_cell_total_variation
+    threshold: 1.0e-3
+    direction: lower_is_better
+    note: "max over cells of 0.5*sum_j |p_R[i,j] - p_py[i,j]|"
+
+  # ---- 4. derived information-theoretic scores --------------------------
+  - name: entropy
+    type: "1d vector (n_cells)"
+    location_reference: "$.entropy"
+    location_candidate: "adata.obs['entropy']"
+    metric: pearson
+    threshold: 0.99
+
+  - name: perplexity
+    type: "1d vector (n_cells)"
+    location_reference: "$.perplexity"
+    location_candidate: "adata.obs['perplexity']"
+    metric: pearson
+    threshold: 0.99
+
+  # ---- 5. smoothFadeout fitted bandwidth --------------------------------
+  - name: tau_smoothfadeout
+    type: "scalar"
+    location_reference: "$.tau_smooth"
+    location_candidate: "uns['hoodscanr']['tau']"
+    metric: relative_error
+    threshold: 1.0e-3
+    direction: lower_is_better
+    note: "R stats::optim BFGS (vmmin) with ndeps=1e-3 central-difference gradient."
+
+  # ---- 6. permutation p-value on perplexity -----------------------------
+  # Stochastic: R sample() and numpy Generator draw different streams by
+  # construction, so this degrades to a distributional gate (taxonomy class 2/8).
+  - name: perplexity_p
+    type: "1d vector (n_cells)"
+    location_reference: "$.perplexity_p"
+    location_candidate: "adata.obs['perplexity_p']"
+    metric: pearson
+    threshold: 0.99
+
+  # ---- 7. neighbourhood clustering --------------------------------------
+  # Label-invariant: k-means init RNG differs between R and Python.
+  - name: clusters
+    type: "1d integer label vector (n_cells)"
+    location_reference: "$.clusters"
+    location_candidate: "adata.obs['clusters']"
+    metric: ari
+    threshold: 0.95
+
+  # ---- 8. colocalisation matrix -----------------------------------------
+  - name: colocal
+    type: "matrix (n_celltypes x n_celltypes)"
+    location_reference: "$.colocal"
+    location_candidate: "plot_colocal(..., return_matrix=True)"
+    metric: deterministic
+    threshold: 1.0e-8
+
+held_out_fixture:
+  path: null
+  description: null
+
+acceleration:
+  enabled: true
+  max_iterations: 20
+  must_pass_gate: true
+
+audit_class: null
+
+created_by: claude-opus-5 (omicverse-rebuildr agent)
+created_at: 2026-07-28

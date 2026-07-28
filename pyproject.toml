@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyhoodscanr"
+version = "0.1.0"
+description = "Pure-Python re-implementation of the Bioconductor package hoodscanR: distance-weighted spatial cellular neighbourhood scanning with per-cell entropy and perplexity."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "GPL-3.0-or-later" }
+authors = [{ name = "omicverse" }]
+maintainers = [{ name = "omicverse" }]
+keywords = [
+    "spatial-transcriptomics", "cellular-neighbourhood", "niche",
+    "single-cell", "entropy", "perplexity", "hoodscanR", "omicverse",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = [
+    "numpy>=1.22",
+    "pandas>=1.4",
+    "scipy>=1.8",
+    "scikit-learn>=1.1",
+    "anndata>=0.8",
+    "matplotlib>=3.5",
+]
+
+[project.optional-dependencies]
+speed = ["numba>=0.56"]
+test = ["pytest>=7", "pyyaml>=6"]
+docs = ["jupyter", "seaborn"]
+
+[project.urls]
+Homepage = "https://github.com/omicverse/py-hoodscanr"
+Source = "https://github.com/omicverse/py-hoodscanr"
+Upstream = "https://github.com/DavisLaboratory/hoodscanR"
+
+[tool.setuptools]
+packages = ["pyhoodscanr"]
+
+[tool.setuptools.package-data]
+pyhoodscanr = ["data/*.csv"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

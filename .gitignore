@@ -1,0 +1,26 @@
+# Build
+dist/
+build/
+*.egg-info/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Upstream R clone
+hoodscanR-ref/
+
+# Large / regenerable artefacts
+data/reference_output.json
+data/reference_output_bin/
+data/candidate_output.npz
+data/_bench_ref.json
+data/_bench_ref_bin/
+
+# Tests
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
